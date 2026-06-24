@@ -3,6 +3,10 @@
 
 void sysInit();
 
+void GPIOInit();
+
+void SysTickInit();
+
 void sysDelay(volatile uint32_t count);
 
 #endif 

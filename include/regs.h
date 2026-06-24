@@ -1,30 +1,9 @@
-/*
- * include/regs.h
- *
- * Hand-written register map. Only registers this project currently touches
- * are defined here — new peripherals get added as each milestone needs them.
- * All addresses and offsets come directly from the STM32F103 reference
- * manual (RM0008), memory map chapter and individual peripheral chapters.
- *
- * Every register is declared as:
- *   (*(volatile uint32_t *)(BASE + OFFSET))
- *
- * volatile: tells the compiler this memory location can change or have
- *   side effects independent of the program — disables read/write
- *   optimizations that would be correct for ordinary RAM but wrong for
- *   hardware registers.
- *
- * uint32_t: STM32F1 peripheral registers are all 32-bit wide. Reading or
- *   writing a narrower type (uint8_t, uint16_t) at these addresses produces
- *   undefined or incorrect behavior on this bus — always use 32-bit
- *   accesses, masking bits yourself when you only care about a subset.
- */
-
 #ifndef REGS_H
 #define REGS_H
 
 #include <stdint.h>
 
+/////////////////////// RCC /////////////////////////////
 
 #define RCC_BASE        0x40021000UL
 
@@ -54,6 +33,8 @@
  * Speed selection (50MHz here) only affects output slew rate, not correctness —
  * it's the standard default used in virtually every reference example.
  */
+
+ ////////////////// GPIO ////////////////////////
 #define GPIOC_BASE      0x40011000UL
 
 /* CRH: port configuration register high. Offset 0x04.
@@ -65,5 +46,31 @@
  * configured as output. Write 0 to a bit -> pin goes low. Write 1 -> high.
  * PC13 = bit 13. Active-low LED: clear bit 13 to turn on, set to turn off. */
 #define GPIOC_ODR       (*(volatile uint32_t *)(GPIOC_BASE + 0x0C))
+
+
+///////////////// SYSTICK //////////////////////
+
+/* 
+    The processor has a 24-bit system timer, SysTick, that counts down from the reload value to
+    zero, reloads (wraps to) the value in the LOAD register on the next clock edge, then counts
+    down on subsequent clocks.
+*/
+
+#define SYSTICK_BASE     0xE000E010UL
+
+//CONFIGURATION REGISTER
+#define SYSTICK_CTRL    (*(volatile uint32_t*)(SYSTICK_BASE))
+    #define SYSTICK_ENABLE     (1U << 0)
+    #define SYSTICK_TICKINT    (1U << 1)
+    #define SYSTICK_CLKSOURCE  (1U << 2)
+
+//Contains LOAD value -> Time period
+#define SYSTICK_LOAD    (*(volatile uint32_t*)(SYSTICK_BASE + 0x04))
+
+//Contains current value of SysTick Counter -> to be read
+#define SYSTICK_VAL     (*(volatile uint32_t*)(SYSTICK_BASE + 0x08))
+
+
+#define SYSTICK_CALIB   (*(volatile uint32_t*)(SYSTICK_BASE + 0x0C))
 
 #endif /* REGS_H */

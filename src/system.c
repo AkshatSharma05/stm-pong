@@ -5,8 +5,8 @@ void sysDelay(volatile uint32_t count)
     while (count--);
 }
 
-void sysInit(){
-/*
+void GPIOInit(){
+    /*
      * Step 1: enable GPIOC (IO PORT C -> IOPC) clock via RCC_APB2ENR bit 4 (IOPCEN).
      *
      * Read-modify-write with |= rather than plain = so we don't disturb
@@ -35,5 +35,34 @@ void sysInit(){
      */
     GPIOC_CRH &= ~(0xFU << 20);
     GPIOC_CRH |=  (0x3U << 20);
+}
+
+void SysTickInit(){
+    /*
+        If CLKSOURCE = AHB
+        The SysTick input clock becomes:
+        8,000,000 Hz
+
+        For a 1 ms interrupt:
+        8,000,000 / 1000 = 8000 cycles
+
+        RELOAD = N - 1 gives:
+        RELOAD = 7999
+
+        SYSTICK_CTRL -> ENABLE = 1 , TICKINT = 1, CLKSRC = 1 (8 MHz)
+    */
+    SYSTICK_CTRL = SYSTICK_ENABLE | SYSTICK_TICKINT | SYSTICK_CLKSOURCE;
+
+    /*A write of any value clears the field to 0, and also clears the COUNTFLAG bit in the
+    STK_CTRL register to 0.*/
+    SYSTICK_VAL  = 0;
+
+    SYSTICK_LOAD = 0x1F3F;
+
+}
+
+void sysInit(){
+    GPIOInit();
+    SysTickInit();
 
 }

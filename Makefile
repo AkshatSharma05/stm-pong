@@ -17,6 +17,8 @@
 CC      = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
 SIZE    = arm-none-eabi-size
+GDB = arm-none-eabi-gdb
+
 
 # -----------------------------------------------------------------------------
 # Paths
@@ -36,6 +38,7 @@ SRCS_S   := $(wildcard startup/*.s)
 # patsubst pattern: replace src/%.c with build/%.o, and startup/%.s with build/%.o
 OBJS     := $(patsubst src/%.c,    $(BUILDDIR)/%.o, $(SRCS_C)) \
             $(patsubst startup/%.s, $(BUILDDIR)/%.o, $(SRCS_S))
+
 
 # -----------------------------------------------------------------------------
 # Compiler flags
@@ -178,6 +181,10 @@ flash: $(TARGET).bin
 .PHONY: debug
 debug:
 	openocd -f tools/openocd.cfg
+
+.PHONY: gdb
+gdb: $(TARGET).elf
+	$(GDB) $<
 
 # -----------------------------------------------------------------------------
 # Clean
