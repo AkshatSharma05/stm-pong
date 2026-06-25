@@ -14,7 +14,7 @@ void GPIOInit(){
      * port clocks, etc.). After this line, the GPIOC peripheral block is
      * receiving its bus clock and its registers are live.
      */
-    RCC_APB2ENR |= RCC_APB2ENR_IOPCEN;
+    RCC_APB2ENR |= (RCC_APB2ENR_IOPCEN | RCC_APB2ENR_IOPBEN);
 
     /*
      * Step 2: configure PC13 as general-purpose push-pull output, 50MHz.
@@ -35,6 +35,11 @@ void GPIOInit(){
      */
     GPIOC_CRH &= ~(0xFU << 20);
     GPIOC_CRH |=  (0x3U << 20);
+
+    GPIOB_CRL &= ~(0xFU << 20);
+    GPIOB_CRL |=  (0x8U << 20);
+
+    GPIOB_ODR |= (1U << 5);
 }
 
 void SysTickInit(){
