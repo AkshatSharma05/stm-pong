@@ -1,4 +1,5 @@
 #include "regs.h"
+#include "spi.h"
 
 void sysDelay(volatile uint32_t count)
 {
@@ -43,34 +44,7 @@ uint8_t GPIOInit(){
     return 0;
 }
 
-uint8_t SPIInit(){
-    // SPI1 is part of the APB2 bus -> so no need to enable a new bus -> APB2 already enabled in GPIOInit
-    
-    /*
-    Using BSRR -> atomic operations
-
-    BSRR is a 32-bit write-only register.
-
-    Bits 0–15: writing a 1 sets the corresponding output bit.
-    Bits 16–31: writing a 1 clears the corresponding output bit.
-    */
-
-    // Set CS RES DC -> HIGH until used
-    GPIOA_BSRR = ((1U << 2) | (1U << 3) | (1U << 4));
-
-    // SPI_CR1 = 0x344;
-    SPI_CR1 =
-        (1U << 9) |   // SSM
-        (1U << 8) |   // SSI
-        (1U << 6) |   // SPE
-        (1U << 2);    // MSTR
-        
-    SPI_CR2 = 0x0;
-
-    return 0;
-}
-
-uint8_t SysTickInit(){
+uint8_t SysTickInit(void){
     /*
         If CLKSOURCE = AHB
         The SysTick input clock becomes:
@@ -96,9 +70,10 @@ uint8_t SysTickInit(){
 
 }
 
-uint8_t sysInit(){
+uint8_t sysInit(void){
     GPIOInit();
     SysTickInit();
+    SPIInit();
 
     return 0;
 }
