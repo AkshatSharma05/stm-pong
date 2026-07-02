@@ -1,11 +1,13 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-void sysInit();
+uint8_t sysInit();
 
-void GPIOInit();
+uint8_t GPIOInit();
 
-void SysTickInit();
+uint8_t SPIInit();
+
+uint8_t SysTickInit();
 
 void sysDelay(volatile uint32_t count);
 
