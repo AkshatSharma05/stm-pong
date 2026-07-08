@@ -17,10 +17,10 @@ int main(void)
         //     GPIOC_ODR ^= (1U << 13);
         // }
 
-        if(!button_pressed( )){
-            GPIOC_ODR |= (1U << 13); //off
-        } else {
+        if(button_pressed( )){
             GPIOC_ODR &= ~(1U << 13); //on
+        } else {
+            GPIOC_ODR |= (1U << 13); //off
         }
     }
 

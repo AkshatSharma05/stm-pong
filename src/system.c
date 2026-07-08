@@ -1,12 +1,12 @@
 #include "regs.h"
-#include "spi.h"
+#include "pal_spi.h"
 
 void sysDelay(volatile uint32_t count)
 {
     while (count--);
 }
 
-uint8_t GPIOInit(){
+uint8_t pal_gpio_init(){
 
     RCC_APB2ENR |= (RCC_APB2ENR_IOPCEN | RCC_APB2ENR_IOPBEN | RCC_APB2ENR_IOPAEN);
 
@@ -50,11 +50,18 @@ uint8_t SysTickInit(void){
         The SysTick input clock becomes:
         8,000,000 Hz
 
-        For a 1 ms interrupt:
-        8,000,000 / 1000 = 8000 cycles
+        Since 1Hz = 1cycle/second
+        then
+        8,000,000Hz=8,000,000cycles/second
+        Now suppose you want a delay of 1 ms.
+        Convert milliseconds to seconds:
+        1ms=0.001s
+        Now apply the formula:
 
-        RELOAD = N - 1 gives:
-        RELOAD = 7999
+        N=f×t
+        N=8,000,000×0.001
+        N=8000 cycles
+        So the timer must count 8000 clock ticks.
 
         SYSTICK_CTRL -> ENABLE = 1 , TICKINT = 1, CLKSRC = 1 (8 MHz)
     */
@@ -71,9 +78,9 @@ uint8_t SysTickInit(void){
 }
 
 uint8_t sysInit(void){
-    GPIOInit();
     SysTickInit();
-    SPIInit();
+    pal_gpio_init();
+    pal_spi_init();
 
     return 0;
 }

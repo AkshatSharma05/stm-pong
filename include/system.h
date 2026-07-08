@@ -5,7 +5,7 @@
 
 uint8_t sysInit(void);
 
-uint8_t GPIOInit(void);
+uint8_t pal_gpio_init(void);
 
 uint8_t SysTickInit(void);
 
