@@ -3,6 +3,7 @@
 #include "system.h"
 #include "handlers.h"
 #include "pal_io.h"
+#include "sh1106.h"
 
 uint32_t last = 0;
 

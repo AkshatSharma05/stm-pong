@@ -18,6 +18,6 @@
 #define SPI_SR_RXNE      (1U << 0)
 
 uint8_t pal_spi_init(void);
-uint8_t pal_spi_send();
+uint8_t pal_spi_send( uint8_t data );
 
 #endif

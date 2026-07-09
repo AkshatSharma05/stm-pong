@@ -1,5 +1,6 @@
 #include "regs.h"
 #include "pal_spi.h"
+#include "sh1106.h"
 
 void sysDelay(volatile uint32_t count)
 {
@@ -81,6 +82,9 @@ uint8_t sysInit(void){
     SysTickInit();
     pal_gpio_init();
     pal_spi_init();
+
+    oled_init();
+    oled_fill(0xFF);
 
     return 0;
 }
