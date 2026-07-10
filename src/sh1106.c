@@ -108,39 +108,82 @@ void oled_clear( ) {
     // memset(oled_framebuffer, 0, sizeof(oled_framebuffer)); -> memset not available right now as no c std libs are being compiled
 }
 
-void oled_set_pixel(uint8_t x, uint8_t y)
-{
+void oled_set_pixel( uint8_t x, uint8_t y ) {
+    if (x >= 128 || y >= 64) return; //no drawing out of bounds
+
     uint8_t page = y / 8;
     uint8_t bit = y % 8;
 
     oled_framebuffer[page * 128 + x] |= (1U << bit);
 }
 
-void oled_clear_pixel(uint8_t x, uint8_t y)
-{
+void oled_clear_pixel( uint8_t x, uint8_t y ) {
     uint8_t page = y / 8;
     uint8_t bit = y % 8;
 
     oled_framebuffer[page * 128 + x] &= ~(1U << bit);
 }
 
-void oled_toggle_pixel(uint8_t x, uint8_t y)
-{
+void oled_toggle_pixel( uint8_t x, uint8_t y ) {
     uint8_t page = y / 8;
     uint8_t bit = y % 8;
 
     oled_framebuffer[page * 128 + x] ^= (1U << bit);
 }
 
-void oled_update(void)
-{
-    for(uint8_t page = 0; page < 8; page++)
+void oled_update(void) {
+    for( uint8_t page = 0; page < 8; page++ )
     {
         oled_set_cursor(page, 0);
 
-        for(uint8_t col = 0; col < 128; col++)
+        for( uint8_t col = 0; col < 128; col++ )
         {
             oled_data(oled_framebuffer[page * 128 + col]);
         }
+    }
+}
+
+//DRAW BASIC PRIMITIVES
+
+void oled_draw_hline( uint8_t x, uint8_t y, uint8_t length ) {
+    for (uint8_t i = 0; i < length; i++)
+    {
+        oled_set_pixel(x + i, y);
+    }
+}
+
+void oled_draw_vline( uint8_t x, uint8_t y, uint8_t length ) {
+    for (uint8_t i = 0; i < length; i++)
+    {
+        oled_set_pixel(x, y + i);
+    }
+}
+
+void oled_draw_rect( uint8_t x, uint8_t y, uint8_t width, uint8_t height ) { 
+    oled_draw_hline( x, y, width );
+    oled_draw_hline( x, y + height - 1, width );
+
+    oled_draw_vline( x, y, height );
+    oled_draw_vline( x + width - 1, y, height );
+}
+
+void oled_draw_rect_filled( uint8_t x, uint8_t y, uint8_t width, uint8_t height ) { 
+    for( uint8_t i = 0; i < height; i++ ){
+        oled_draw_hline( x, y + i, width );
+    }
+}
+
+void oled_fill_circle(int16_t xc, int16_t yc, int16_t radius)
+{
+    for (int16_t y = -radius; y <= radius; y++)
+    {
+        int16_t x = 0;
+
+        while ((x * x + y * y) <= radius * radius)
+        {
+            x++;
+        }
+
+        oled_draw_hline(xc - (x - 1), yc + y, 2 * x - 1);
     }
 }

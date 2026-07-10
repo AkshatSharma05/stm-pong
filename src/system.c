@@ -87,17 +87,13 @@ uint8_t sysInit(void){
     pal_spi_init();
 
     oled_init();
-    oled_fill(0x8);
-    sysDelay(2000);
-    oled_fill(0x8A);
-    sysDelay(2000);
-    oled_fill(0x8D);
 
     oled_clear();
 
-    oled_set_pixel(10,10);
-    oled_set_pixel(20,20);
-    oled_set_pixel(30,30);
+    oled_fill_circle(64, 32, 3);
+
+    oled_draw_rect_filled( 6, 22, 4, 20);
+    oled_draw_rect_filled( 118, 22, 4, 20);
 
     oled_update();
 
