@@ -9,6 +9,6 @@ uint8_t pal_gpio_init(void);
 
 uint8_t SysTickInit(void);
 
-void sysDelay(volatile uint32_t count);
+void sysDelay(volatile uint32_t ms);
 
 #endif 

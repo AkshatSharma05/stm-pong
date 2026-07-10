@@ -1,5 +1,15 @@
 #include "sh1106.h"
 
+/*
+    PAGE TO PIXEL COORD
+    (x, y) -> page = y / 8;
+    bit in page = y % 8
+
+    index in array -> each page has 128 columns/bytes -> 128*page + x (pages are 0 to 7)
+*/
+
+uint8_t oled_framebuffer[ 128 * 8 ] = {0}; // 1 page = 1 byte -> * 128 columns
+
 void oled_command( uint8_t cmd ) {
     oled_cs_low( );
     oled_dc_command( );
@@ -86,6 +96,51 @@ void oled_fill(uint8_t pattern)
         for(uint8_t col = 0; col < 128; col++)
         {
             oled_data(pattern);
+        }
+    }
+}
+
+void oled_clear( ) {
+    for ( uint16_t i = 0; i < sizeof( oled_framebuffer ); i++ ){
+        oled_framebuffer[i] = 0;
+    }
+
+    // memset(oled_framebuffer, 0, sizeof(oled_framebuffer)); -> memset not available right now as no c std libs are being compiled
+}
+
+void oled_set_pixel(uint8_t x, uint8_t y)
+{
+    uint8_t page = y / 8;
+    uint8_t bit = y % 8;
+
+    oled_framebuffer[page * 128 + x] |= (1U << bit);
+}
+
+void oled_clear_pixel(uint8_t x, uint8_t y)
+{
+    uint8_t page = y / 8;
+    uint8_t bit = y % 8;
+
+    oled_framebuffer[page * 128 + x] &= ~(1U << bit);
+}
+
+void oled_toggle_pixel(uint8_t x, uint8_t y)
+{
+    uint8_t page = y / 8;
+    uint8_t bit = y % 8;
+
+    oled_framebuffer[page * 128 + x] ^= (1U << bit);
+}
+
+void oled_update(void)
+{
+    for(uint8_t page = 0; page < 8; page++)
+    {
+        oled_set_cursor(page, 0);
+
+        for(uint8_t col = 0; col < 128; col++)
+        {
+            oled_data(oled_framebuffer[page * 128 + col]);
         }
     }
 }

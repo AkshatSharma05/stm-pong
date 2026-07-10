@@ -2,9 +2,12 @@
 #include "pal_spi.h"
 #include "sh1106.h"
 
-void sysDelay(volatile uint32_t count)
+extern volatile uint32_t sysTicks;
+
+void sysDelay(volatile uint32_t ms)
 {
-    while (count--);
+    uint32_t start = sysTicks;
+    while ((sysTicks - start) < ms){};
 }
 
 uint8_t pal_gpio_init(){
@@ -84,7 +87,19 @@ uint8_t sysInit(void){
     pal_spi_init();
 
     oled_init();
-    oled_fill(0xFF);
+    oled_fill(0x8);
+    sysDelay(2000);
+    oled_fill(0x8A);
+    sysDelay(2000);
+    oled_fill(0x8D);
+
+    oled_clear();
+
+    oled_set_pixel(10,10);
+    oled_set_pixel(20,20);
+    oled_set_pixel(30,30);
+
+    oled_update();
 
     return 0;
 }
