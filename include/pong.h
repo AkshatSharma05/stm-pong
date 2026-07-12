@@ -6,7 +6,7 @@
 #define SCREEN_HEIGHT   64
 #define BALL_RADIUS      2
 #define PADDLE_WIDTH   4
-#define PADDLE_HEIGHT 20
+#define PADDLE_HEIGHT 12
 
 //DECLARATIONS
 typedef struct {
