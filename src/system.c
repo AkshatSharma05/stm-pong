@@ -18,11 +18,21 @@ uint8_t pal_gpio_init(){
     GPIOC_CRH &= ~(0xFU << 20);
     GPIOC_CRH |=  (0x3U << 20);
 
-    //GPIO B
+    //GPIO B5
     GPIOB_CRL &= ~(0xFU << 20);
     GPIOB_CRL |=  (0x8U << 20);
 
+    //GPIO B6
+    GPIOB_CRL &= ~(0xFU << 24);
+    GPIOB_CRL |=  (0x8U << 24);
+
+    //GPIO B7
+    GPIOB_CRL &= ~(0xFU << 28);
+    GPIOB_CRL |=  (0x8U << 28);
+
     GPIOB_ODR |= (1U << 5);
+    GPIOB_ODR |= (1U << 6);
+    GPIOB_ODR |= (1U << 7);
 
     //GPIO A -> 2 , 3 , 4 -> Output Push Pull
 
@@ -88,14 +98,12 @@ uint8_t sysInit(void){
 
     oled_init();
 
-    oled_clear();
-
-    oled_fill_circle(64, 32, 3);
-
-    oled_draw_rect_filled( 6, 22, 4, 20);
-    oled_draw_rect_filled( 118, 22, 4, 20);
-
-    oled_update();
+    game_loop();
 
     return 0;
+}
+
+int16_t iabs(int16_t x)
+{
+    return (x < 0) ? -x : x;
 }

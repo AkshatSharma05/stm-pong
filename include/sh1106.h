@@ -31,6 +31,11 @@ void oled_draw_rect( uint8_t x, uint8_t y, uint8_t width, uint8_t height );
 void oled_draw_rect_filled( uint8_t x, uint8_t y, uint8_t width, uint8_t height );
 void oled_fill_circle(int16_t xc, int16_t yc, int16_t radius);
 
+void oled_draw_line(int16_t x0,
+                    int16_t y0,
+                    int16_t x1,
+                    int16_t y1);
+
 void oled_clear( );
 
 void oled_reset( );

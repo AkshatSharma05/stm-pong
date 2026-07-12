@@ -25,7 +25,7 @@
 /* CRH: port configuration register high. Offset 0x04.
  * Configures pins 8-15, four bits per pin. */
 #define GPIOC_CRH       (*(volatile uint32_t *)(GPIOC_BASE + 0x04)) //C13
-#define GPIOB_CRL       (*(volatile uint32_t *)(GPIOB_BASE + 0x00)) //B5
+#define GPIOB_CRL       (*(volatile uint32_t *)(GPIOB_BASE + 0x00)) //B5/6/7
 #define GPIOA_CRL       (*(volatile uint32_t *)(GPIOA_BASE + 0x00)) // A2/4/3
 
 /* ODR: output data register. Offset 0x0C.

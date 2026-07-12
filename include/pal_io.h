@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 
-uint8_t button_pressed( );
+uint8_t pb5_pressed(void);
+uint8_t pb6_low(void);
+uint8_t pb7_low(void);
 
 //OLED HELPERS
 
@@ -16,5 +18,8 @@ void oled_dc_data(void);//PA2 high
 void oled_reset_low(void);//PA3 low
 void oled_reset_high(void);//PA3 high
 
+//ENCODER HELPERS
+void enc_sample(void);
+int32_t enc_get_delta(void);
 
 #endif

@@ -184,6 +184,42 @@ void oled_fill_circle(int16_t xc, int16_t yc, int16_t radius)
             x++;
         }
 
-        oled_draw_hline(xc - (x - 1), yc + y, 2 * x - 1);
+        oled_draw_hline((xc - x) - 1, yc + y, 2 * x - 1);
+    }
+}
+
+void oled_draw_line(int16_t x0,
+                    int16_t y0,
+                    int16_t x1,
+                    int16_t y1)
+{
+    int16_t dx = iabs(x1 - x0);
+    int16_t sx = (x0 < x1) ? 1 : -1;
+
+    int16_t dy = iabs(y1 - y0);
+    int16_t sy = (y0 < y1) ? 1 : -1;
+
+    int16_t err = dx - dy;
+
+    while (1)
+    {
+        oled_set_pixel(x0, y0);
+
+        if (x0 == x1 && y0 == y1)
+            break;
+
+        int16_t e2 = err * 2;
+
+        if (e2 > -dy)
+        {
+            err -= dy;
+            x0 += sx;
+        }
+
+        if (e2 < dx)
+        {
+            err += dx;
+            y0 += sy;
+        }
     }
 }

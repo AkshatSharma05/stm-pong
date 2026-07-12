@@ -11,19 +11,5 @@ int main(void)
 {
     sysInit();
 
-    //LED Blink
-    for (;;) {
-        // if(sysTicks - last > 500){
-        //     last = sysTicks;
-        //     GPIOC_ODR ^= (1U << 13);
-        // }
-
-        if(button_pressed( )){
-            GPIOC_ODR &= ~(1U << 13); //on
-        } else {
-            GPIOC_ODR |= (1U << 13); //off
-        }
-    }
-
     return 0;
 }
