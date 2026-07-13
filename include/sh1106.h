@@ -38,6 +38,8 @@ void oled_draw_line(int16_t x0,
 
 void oled_clear( );
 
+void oled_update( );
+
 void oled_reset( );
 
 #endif

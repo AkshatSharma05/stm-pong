@@ -8,7 +8,51 @@ Paddle *active_paddle = &p_r;
 
 uint8_t delay = 0;
 
+typedef enum {
+    GAME_STATE_START = 0,
+    GAME_STATE_PLAY
+} GameState;
+
+static void game_reset(void);
+static void draw_start_screen(void);
+
 void game_loop(){
+    GameState state = GAME_STATE_START;
+
+    game_reset();
+
+    while(1){
+        oled_clear();
+
+        if (state == GAME_STATE_START)
+        {
+            draw_start_screen();
+
+            if (pb5_pressed())
+            {
+                while (pb5_pressed()) {
+                }
+
+                game_reset();
+                state = GAME_STATE_PLAY;
+            }
+        }
+        else
+        {
+            game_update();
+
+            if (delay) {
+                sysDelay(1000);
+                delay = 0;
+            }
+        }
+
+        oled_update();
+    }
+}
+
+static void game_reset(void)
+{
     p_l.x = 6;
     p_l.y = 26;
 
@@ -20,21 +64,18 @@ void game_loop(){
 
     ball.dx = 2;
     ball.dy = 2;
+}
 
-    while(1){
-        oled_clear();
-        game_update();
-        oled_update();
-        if (delay) {
-        sysDelay(1000);
-        delay = 0;
-    }
-    }
+static void draw_start_screen(void)
+{
+    draw_glyph(49, 28, glyph_P);
+    draw_glyph(55, 28, glyph_O);
+    draw_glyph(62, 28, glyph_N);
+    draw_glyph(69, 28, glyph_G);
 }
 
 void game_update(void)
-{
-
+{   
     paddle_update();
 
     ball_update();
@@ -140,18 +181,9 @@ void ball_update(){
 
 void paddle_update(void)
 {
-    static uint8_t prev_btn = 0;
-
-    // Toggle active paddle on button press
-    uint8_t btn = pb5_pressed();
-    if (btn && !prev_btn)
-    {
-        if (active_paddle == &p_l)
-            active_paddle = &p_r;
-        else
-            active_paddle = &p_l;
-    }
-    prev_btn = btn;
+    if(ball.dx > 0) {
+        active_paddle = &p_r;
+    }else{ active_paddle = & p_l; }
 
     // Move active paddle with encoder
     int32_t step = enc_get_delta();

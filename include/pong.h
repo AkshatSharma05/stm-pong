@@ -1,10 +1,11 @@
 #ifndef PONG_H
 #define PONG_H
 #include "sh1106.h"
+#include "font.h"
 
 #define SCREEN_WIDTH   128
 #define SCREEN_HEIGHT   64
-#define BALL_RADIUS      2
+#define BALL_RADIUS      3
 #define PADDLE_WIDTH   4
 #define PADDLE_HEIGHT 12
 
