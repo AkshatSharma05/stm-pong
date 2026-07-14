@@ -15,3 +15,32 @@ A simple implementation of Pong running on the STM32F103C8T6 (Blue Pill), built 
     alt="PONG Demo Video">
 </a>
 
+
+---
+
+# Building
+## Requirements
+```
+arm-none-eabi-gcc
+arm-none-eabi-binutils
+make
+stlink
+```
+
+Build the project:
+
+```
+make
+```
+
+Flash the firmware:
+
+```
+make flash
+```
+
+Clean build files:
+
+```
+make clean
+```
